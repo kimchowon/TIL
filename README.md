@@ -15,7 +15,7 @@
 
 ## 📚List🏃‍♀️
 
-🖤 [2021-09-28(화)](https://github.com/kimchowon/TIL/blob/main/2021/09/2021-09-29-%EC%88%98.md)
+🖤 [2021-09-29(수)](https://github.com/kimchowon/TIL/blob/main/2021/09/2021-09-29-%EC%88%98.md)
 
 🖤 [2021-09-28(화)](https://github.com/kimchowon/TIL/blob/main/2021/09/2021-09-28-%ED%99%94.md)
 
