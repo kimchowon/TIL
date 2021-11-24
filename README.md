@@ -14,6 +14,10 @@
 <br/>
 
 ## 📚List🏃‍♀️
+🖤 [2021-11-18()](https://github.com/kimchowon/TIL/blob/main/2021/11/2021-11-18-%EB%AA%A9.md)
+
+🖤 [2021-11-10(수)](https://github.com/kimchowon/TIL/blob/main/2021/11/2021-11-10-%EC%88%98.md)
+
 🖤 [2021-11-07(일)](https://github.com/kimchowon/TIL/blob/main/2021/11/2021-11-07-%EC%9D%BC.md)
 
 🖤 [2021-10-19(화)](https://github.com/kimchowon/TIL/blob/main/2021/10/2021-10-19-%ED%99%94.md)
