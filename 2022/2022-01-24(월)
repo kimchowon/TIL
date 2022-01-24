@@ -1,0 +1,141 @@
+# 람다 표현
+
+### 표현 방식
+
+(인자 리스트) → { 바디 }
+
+### 인자 리스트
+
+- 인자가 없을 때: ()
+
+```java
+Supplier<Integer> get10 = () -> 10;
+```
+
+- 인자가 한개일 때: (one) 또는 괄호 없이 그냥 one
+
+```java
+Consumer<String> printName1 = (name) -> System.out.println("My name is " + name);
+Consumer<String> printName2 = name -> System.out.println("My name is " + name);
+```
+
+- 인자가 여러개일 때: (one, two)
+
+```java
+BiFunction<Integer, Integer, Integer> plusTwoNumbers = (number1, number2) -> number1 + number2;
+```
+
+- 인자의 타입은 생략 가능, 컴파일러가 추론(infer)하지만 명시해도 됨. (Integer one, Integer two)
+    - BinaryOperator<Integer> sum = ... 선언할 때 다이아몬드 연산자 내 제네릭 타입을 보고 컴파일러가 인자 타입을 추론
+
+### 바디
+
+- 화살표 오른쪽에 함수 본문을 정의
+- 여러줄인 경우에 { } 를 사용해서 묶는다.
+- 한줄인 경우에는 { } 생략 가능. return 키워드도 생략 가능
+
+### 변수 캡쳐 (Variable Capture)
+
+- 람다 캡쳐링: 람다식의 매개 변수가 아닌 외부에서 정의된 변수를 자유 변수라고 부르는데, 람다 바디에서 자유 변수를 참조하는 행위를 람다 캡쳐링
+- 로컬 변수 캡쳐
+    - final 이거나 effective final 변수일 때만 참조할 수 있다.
+        - 이유 정리할 것. 자바의 메모리 구조 관련
+    - 그렇지 않을 경우 동시성(concurrency) 문제가 생길 수 있어서 컴파일러가 방지한다.
+- effective final
+    - java 8이전에는 변수 앞에 반드시 final 키워드를 선언해야 했다.
+    - 다른 곳에서 변수 값을 변경하는 코드가 없는, 사실상 final인 변수, final 키워드를 생략해도 된다.
+    - 변수 값을 재할당하는 경우에 에러 발생
+    
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/12bb124f-3073-4afc-ade8-77f44979fed5/Untitled.png)
+    
+- 내부 클래스, 익명 클래스, 람다에서 모두 변수 캡쳐가 가능하다. (공통점)
+
+```java
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+
+public class Foo {
+
+    public void run() {
+        int baseNumber = 10; // effective final
+
+        // 람다에서 변수 캡쳐
+        IntConsumer printInt = number -> System.out.println(number + baseNumber); // 람다 캡쳐링
+        printInt.accept(10);
+
+        // 내부 클래스에서 변수 캡쳐
+        class LocalClass {
+            void printBaseNumber() {
+                System.out.println(baseNumber);
+            }
+        }
+
+        // 익명 클래스에서 변수 캡쳐
+        Consumer<Integer> integerConsumer = new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(baseNumber);
+            }
+        };
+    }
+}
+```
+
+- 내부 클래스/익명 클래스,  람다의 변수 캡쳐 차이점
+    - 내부 클래스/익명 클래스
+        - 변수의 쉐도잉이 일어난다.
+        
+        ```java
+        import java.util.function.Consumer;
+        import java.util.function.IntConsumer;
+        
+        public class Foo {
+        
+            public void run() {
+                int baseNumber = 10; // effective final
+        				
+        				// 내부 클래스에서 변수 캡쳐
+                class LocalClass {
+        
+                    int baseNumber = 11; // 변수 쉐도잉, 내부 클래스 밖에 있는 baseNumber 변수는 가려진다.
+                    void printBaseNumber() {
+                        System.out.println(baseNumber); // 11 출력
+                    }
+                }
+        
+                // 익명 클래스에서 변수 캡쳐
+                Consumer<Integer> integerConsumer = new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer baseNumber) { // 변수 쉐도잉
+                        System.out.println(baseNumber); // 11 출력
+                    }
+                };
+                integerConsumer.accept(11);
+        		}
+        }
+        ```
+        
+    - 람다
+        - 변수를 쉐도잉하지 않는다.
+        - 동일한 변수명으로 변수 선언시 에러 발생
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a9868c70-ce51-40bf-8808-90c07e3a8b6b/Untitled.png)
+        
+    - 내부 클래스, 익명 클래스는 생성될 시에 새로운 스콥을 만들지만, 람다는 람다는 감싸고 있는 외부와 스콥이 같기 때문. 같은 스콥내에서는 동일한 변수명을 선언할 수 없다.
+    - 변수의 쉐도잉:  함수 안에서 밖에서도 선언되었던 같은 이름의 변수를 사용하는 경우
+        - 함수 밖의 변수는 잠시 가려짐 (shadowing)
+        - 함수 안에서는 해당 함수에서의 변수를 사용 (함수 밖 변수의 값은 변하지 않음)
+        - 함수에서 빠져나오면 다시 해당 변수에 접근할 수 있음
+        
+        ```java
+        public class Foo {
+        	int baseNumber = 10;
+        
+        	public void printAge() {
+        		int baseNumber = 11; // 변수 쉐도잉
+        		System.out.println("age is " + baseNumber);
+        }
+        
+        // result
+        age is 11
+        ```
