@@ -14,7 +14,9 @@
 <br/>
 
 ## 📚List🏃‍♀️
-🖤 [2022-02-12(토)](https://github.com/kimchowon/TIL/blob/main/2022/02/2022-02-12-%ED%86%A0.md)
+🖤 [2022-02-12(토)](https://ygithub.com/kimchowon/TIL/blob/main/2022/02/2022-02-12-%ED%86%A0.md)
+
+🖤 [2022-02-12(토)](https://ygithub.com/kimchowon/TIL/blob/main/2022/02/2022-02-12-%ED%86%A0.md)
 
 🖤 [2022-02-11(금)](https://github.com/kimchowon/TIL/blob/main/2022/02/2022-02-11-%EA%B8%88.md)
 
